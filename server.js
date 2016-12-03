@@ -1,7 +1,13 @@
 const	express = require("express"),
 		bodyParser = require("body-parser"),
 		logger = require("morgan"),
-		mongoose = require("mongoose");
+		mongoose = require("mongoose"),
+		request = require("request"),
+		cheerio = require("cheerio"),
+		PORT = 3000;
+
+var	Article = require('./models/articleModel.js'),
+	Note = require('./models/articleModel.js');
 // Mongoose mpromise deprecated - use bluebird promises
 var Promise = require("bluebird");
 
@@ -22,6 +28,15 @@ app.use(express.static("public"));
 mongoose.connect("mongodb://localhost/kos_scrape_db");
 var db = mongoose.connection;
 
+db.on("error", function(error) {
+  console.log("Mongoose Error: ", error);
+});
+
+// Once logged in to the db through mongoose, log a success message
+db.once("open", function() {
+  console.log("Mongoose connection successful.");
+});
+
 //MONGODB_URI as => mongolab-polished-17211
 //MONGODB_URI is mongodb://heroku_z3vrnqqn:u5ah129tbdnucvkud7ksra1ika@ds119718.mlab.com:19718/heroku_z3vrnqqn -- paste as argument into mongoose.connect() function
 
@@ -31,17 +46,47 @@ app.engine('handlebars', exphbs({
 }));
 app.set('view engine', 'hbs');
 
+request("http://www.dailykos.com", function(error, response, html) {
 
+  // Load the HTML into cheerio
+  var $ = cheerio.load(html);
 
+  // Make an empty array for saving our scraped info
+  // var result = [];
 
+  // With cheerio, look at each award-winning site, enclosed in "figure" tags with the class name "site"
+  $(".story").each(function(i, element) {
 
+  	var storyTitle = $(element).find(".story-title.heading").children("a").first().text();
+  	var storyDate = $(element).find(".author-date.visible-sm-block").children("span.timestamp").first().text();
+    var storyLink = $(element).find(".story-title.heading").children("a").first().attr("href");
+
+    var newArticle = new Article({
+    	title: storyTitle,
+     	date: storyDate,
+     	link: "http://www.dailykos.com" + storyLink
+    });
+
+    newArticle.save(function(err, data) {
+    	if(err) {
+    		console.log("newarticle save error is " + err);
+    	} else {
+    		console.log(data);
+    	}
+    });
+  }); //cheerio each
+});//request
+
+app.listen(PORT, function() {
+	console.log('app listening on port ' + PORT);
+});
 
 /* 
 
 to do:
 
 1.  scrape dailykos titles and dates and save articles to mongo. -- friday
-2.  prevent saving of duplicate titles and dates.  -- saturday
+2.  prevent saving of duplicate titles.  -- friday
 3.  write basic first page front end to call articles documents and display titles to choose from. -- saturday
 4.  write bad dummy front end to enter a single text comment displayed with the title that it's about from the first call. -- sunday
 5.  push more than one note to notes collection with the object id of the title. -- sunday

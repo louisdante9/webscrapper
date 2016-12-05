@@ -1,4 +1,7 @@
-const	mongoose = require("mongoose");
+const	mongoose = require("mongoose"), 
+			express = require('express');
+
+const	app = express();
 
 // Create a Schema class with mongoose
 var Schema = mongoose.Schema;
@@ -21,12 +24,13 @@ var ArticleSchema = new Schema ({
 	}
 });
 
-ArticleSchema.methods.retrieveAll = function() {
-	return this.model('Article').find({}, function(err, data) {
+ArticleSchema.methods.retrieveAll = function(res) {
+	return this.model('Article').find({}).sort({date: -1}).exec(function(err, data) {
 		if(err) {
 			console.log(err);
 		} else {
 			console.log(data);
+			res.render('index.hbs', { articles: data});
 		}
 	});
 };

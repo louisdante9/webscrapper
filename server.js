@@ -5,6 +5,7 @@ const	express = require("express"),
 		request = require("request"),
 		cheerio = require("cheerio"),
 		PORT = 3000,
+		exphbs = require('express-handlebars'),
 		util = require('util');
 
 var	Article = require('./models/articleModel.js'),
@@ -15,6 +16,11 @@ var Promise = require("bluebird");
 mongoose.Promise = Promise;
 
 var app = express();
+
+app.engine('hbs', exphbs({
+	defaultLayout: 'main.hbs'
+}));
+app.set('view engine', 'handlebars');
 
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({
@@ -41,11 +47,6 @@ db.once("open", function() {
 //MONGODB_URI as => mongolab-polished-17211
 //MONGODB_URI is mongodb://heroku_z3vrnqqn:u5ah129tbdnucvkud7ksra1ika@ds119718.mlab.com:19718/heroku_z3vrnqqn -- paste as argument into mongoose.connect() function
 
-var exphbs = require('express-handlebars');
-app.engine('hbs', exphbs({
-	defaultLayout: 'main.hbs'
-}));
-app.set('view engine', 'handlebars');
 
 app.use(logger('combined'));
 logger('combined', {buffer: true});
@@ -70,7 +71,7 @@ request("http://www.dailykos.com", function(error, response, html) {
      	date: storyDate,
      	link: "http://www.dailykos.com" + storyLink
     });
-
+    
     newArticle.save(function(err, data) {
     	if(err) {
     		console.log("newarticle save error is " + err);
@@ -87,17 +88,7 @@ app.get('/', function(req, res) {
 
 	//mongoose call for all articles
 
-	setTimeout(article.retrieveAll, 10);
-
-	// var callAllShort = article.callAllShort();
-
-	// console.log(callAllShort);
-
-	// res.render('index.hbs', { articles: {articleTitle: callAllShort.title,
-	// 	articleDate: callAllShort.date,
-	// 	articleLink: callAllShort.link
-	// 	}
-	// });
+	article.retrieveAll(res);
 });
 
 

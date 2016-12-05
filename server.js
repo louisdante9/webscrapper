@@ -4,7 +4,8 @@ const	express = require("express"),
 		mongoose = require("mongoose"),
 		request = require("request"),
 		cheerio = require("cheerio"),
-		PORT = 3000;
+		PORT = 3000,
+		util = require('util');
 
 var	Article = require('./models/articleModel.js'),
 	Note = require('./models/articleModel.js');
@@ -41,10 +42,13 @@ db.once("open", function() {
 //MONGODB_URI is mongodb://heroku_z3vrnqqn:u5ah129tbdnucvkud7ksra1ika@ds119718.mlab.com:19718/heroku_z3vrnqqn -- paste as argument into mongoose.connect() function
 
 var exphbs = require('express-handlebars');
-app.engine('handlebars', exphbs({
-	defaultLayout: 'main'
+app.engine('hbs', exphbs({
+	defaultLayout: 'main.hbs'
 }));
-app.set('view engine', 'hbs');
+app.set('view engine', 'handlebars');
+
+app.use(logger('combined'));
+logger('combined', {buffer: true});
 
 request("http://www.dailykos.com", function(error, response, html) {
 
@@ -77,6 +81,26 @@ request("http://www.dailykos.com", function(error, response, html) {
   }); //cheerio each
 });//request
 
+app.get('/', function(req, res) {
+
+	var article = new Article(req.body);
+
+	//mongoose call for all articles
+
+	setTimeout(article.retrieveAll, 10);
+
+	// var callAllShort = article.callAllShort();
+
+	// console.log(callAllShort);
+
+	// res.render('index.hbs', { articles: {articleTitle: callAllShort.title,
+	// 	articleDate: callAllShort.date,
+	// 	articleLink: callAllShort.link
+	// 	}
+	// });
+});
+
+
 app.listen(PORT, function() {
 	console.log('app listening on port ' + PORT);
 });
@@ -87,12 +111,12 @@ to do:
 
 1.  scrape dailykos titles and dates and save articles to mongo. -- friday
 2.  prevent saving of duplicate titles.  -- friday
-3.  write basic first page front end to call articles documents and display titles to choose from. -- saturday
-4.  write bad dummy front end to enter a single text comment displayed with the title that it's about from the first call. -- sunday
-5.  push more than one note to notes collection with the object id of the title. -- sunday
-6.  retrieve notes for an article on click with the bad dummy front end. -- monday
-7.  add questions to notes and retrieve more complicated notes.  push questions and answers to the same notes (embed). -- tuesday/wednesday
-8.  write handlebars front end and make handlebars actually display the mongoose data -- wednesday-saturday
+3.  write handlebars to display articles --monday
+4.  write front end to display full article and enter a note. -- monday
+5.  push more than one note to notes collection with the object id of the title. -- tuesday
+6.  retrieve notes for an article on click with jquery. -- tuesday
+7.  add questions to notes and retrieve more complicated notes.  push questions and answers to the same notes (embed). -- wednesday
+8.  css -- friday
 
 
 

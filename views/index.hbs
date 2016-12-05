@@ -1,0 +1,12 @@
+<div class="container-fluid container-articles">
+	<div class="row row-articles">
+
+{{#each articles}}
+	<div class="col col-sm-3 col-single-article">
+		<h3><a href="{{articleLink}}">{{articleTitle}}</a></h3>
+		<p>{{articleDate}}</p>
+	</div><!-- /col-single-article -->
+{{/each}}
+
+	</div><!-- /row -->
+</div><!-- /container-articles -->

@@ -6,7 +6,8 @@ const	express = require("express"),
 		cheerio = require("cheerio"),
 		PORT = 3000,
 		exphbs = require('express-handlebars'),
-		util = require('util');
+		util = require('util'),
+		jquery = require('jquery');
 
 var	Article = require('./models/articleModel.js'),
 	Note = require('./models/articleModel.js');
@@ -65,13 +66,15 @@ request("http://www.dailykos.com", function(error, response, html) {
   	var storyTitle = $(element).find(".story-title.heading").children("a").first().text();
   	var storyDate = $(element).find(".author-date.visible-sm-block").children("span.timestamp").first().text();
     var storyLink = $(element).find(".story-title.heading").children("a").first().attr("href");
+    var para1 = $(element).find(".story-intro").find("p").first().text();
 
     var newArticle = new Article({
     	title: storyTitle,
      	date: storyDate,
-     	link: "http://www.dailykos.com" + storyLink
+     	link: "http://www.dailykos.com" + storyLink,
+     	story: para1
     });
-    
+
     newArticle.save(function(err, data) {
     	if(err) {
     		console.log("newarticle save error is " + err);
@@ -89,8 +92,21 @@ app.get('/', function(req, res) {
 	//mongoose call for all articles
 
 	article.retrieveAll(res);
+
 });
 
+app.get('/detail', function(req, res) {
+	//get the juice from the mongo article document selected and display it on the page with handlebars  use a custom method?
+
+	var article = new Article(req.body);
+
+	var objID = req.query.objID;
+	console.log(objID);
+
+	article.retrieveOne(res, objID);
+
+
+});
 
 app.listen(PORT, function() {
 	console.log('app listening on port ' + PORT);

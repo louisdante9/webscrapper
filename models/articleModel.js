@@ -21,6 +21,10 @@ var ArticleSchema = new Schema ({
 		type: String,
 		trim: true,
 		unique: true
+	},
+	story: {
+		type: String,
+		trim: true
 	}
 });
 
@@ -31,6 +35,19 @@ ArticleSchema.methods.retrieveAll = function(res) {
 		} else {
 			console.log(data);
 			res.render('index.hbs', { articles: data});
+		}
+	});
+};
+
+ArticleSchema.methods.retrieveOne = function(res, objID) {
+	return this.model('Article')
+		.find({_id: objID})
+		.exec(function(err, data) {
+		if(err) {
+			console.log(err);
+		} else {
+			console.log(data);
+			res.render('detail.hbs', {article: data[0]});
 		}
 	});
 };

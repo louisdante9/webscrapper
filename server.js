@@ -120,10 +120,9 @@ to do:
 2.  prevent saving of duplicate titles.  -- friday
 3.  write handlebars to display articles --monday
 4.  write front end to display full article and enter a note. -- monday
-5.  push more than one note to notes collection with the object id of the title. -- tuesday
-6.  retrieve notes for an article on click with jquery. -- tuesday
-7.  add questions to notes and retrieve more complicated notes.  push questions and answers to the same notes (embed). -- wednesday
-8.  css -- friday
+5.  push more than one note to notes collection with questions with the object id of the title. -- tuesday
+6.  retrieve notes for an article in another handlebars view on click with jquery. -- wednesday
+7.  css and front end -- thursday-saturday
 
 
 

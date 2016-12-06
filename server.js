@@ -10,7 +10,7 @@ const	express = require("express"),
 		jquery = require('jquery');
 
 var	Article = require('./models/articleModel.js'),
-	Note = require('./models/articleModel.js');
+		Note = require('./models/articleModel.js');
 // Mongoose mpromise deprecated - use bluebird promises
 var Promise = require("bluebird");
 
@@ -18,9 +18,18 @@ mongoose.Promise = Promise;
 
 var app = express();
 
-app.engine('hbs', exphbs({
-	defaultLayout: 'main.hbs'
-}));
+app.views({  
+    engines: {
+        'hbs': exphbs
+    },
+    path: 'views',
+    layoutPath: 'views/layout',
+    layout: 'main.hbs',
+    partialsPath: 'views/partials'
+});
+// app.engine('hbs', exphbs({
+// 	defaultLayout: 'main.hbs'
+// }));
 app.set('view engine', 'handlebars');
 
 app.use(logger("dev"));
@@ -100,11 +109,22 @@ app.get('/detail', function(req, res) {
 
 	var article = new Article(req.body);
 
-	var objID = req.query.objID;
-	console.log(objID);
+	var articleID = req.query.articleID;
+	console.log(articleID);
 
-	article.retrieveOne(res, objID);
+	article.retrieveOne(res, articleID);
 
+
+});
+
+app.post('/submit', function(req, res) {
+	
+	var note = new Note(req.body);
+
+	var articleID = req.query.articleID;
+	console.log(articleID);
+
+	note.saveNote(res, articleID);
 
 });
 

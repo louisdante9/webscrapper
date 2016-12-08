@@ -53,5 +53,9 @@ $(document).ready(function() {
 		relocateWindow();
 	});
 
+	$('.grid').masonry({
+  	// options
+  	itemSelector: '.col-single-article'
+	});
 });
 

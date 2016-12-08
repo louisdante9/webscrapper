@@ -1,13 +1,14 @@
 
 <div class="container-fluid container-detail">
 	<div class="row">
+		{{#article}}
 		<div class="col col-sm-6 col-article">
-			<h3 data-obj-id="{{article._id}}">{{article.title}}</h3>
-			<p>{{article.date}}</p>
-			<p>{{article.story}}</p>
+			<h3 data-obj-id="{{article._id}}">{{title}}</h3>
+			<p>{{date}}</p>
+			<p>{{story}}</p>
 			<button type="button" class="btn btn-large"><a href="{{article.link}}">View Full Article</a></button>
 		</div><!-- /col-article -->
-
+		{{/article}}
 		{{#if showNotes}}
 			{{> answers}}
 		{{else}}

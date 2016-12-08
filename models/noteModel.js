@@ -62,7 +62,7 @@ NoteSchema.methods.saveNote = function(req, res, Article, note) {
 					} else {
 						console.log('note id ' + note._id)
 						console.log(numAffected);
-						res.redirect('/shownotes?articleID=' + req.query.articleID + '&showNotes=true');
+						res.redirect('/shownotes?' + 'showNotes=true&articleID=' + req.query.articleID);
 					}
 				});
 			}

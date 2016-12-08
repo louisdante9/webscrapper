@@ -1,15 +1,26 @@
-console.log(window.location.origin);
+
 $(document).ready(function() {
+
+	var path;
+	var data;
+	var articleIDArray = window.location.href.split('=');
+
+	function relocateWindow() {
+		data = $.param(data);
+		window.location = (window.location.origin + path + data);
+	}
+
 	$('.col-single-article').click(function() {
-		var articleID = $(event.target).attr('data-obj-id');
-		console.log(articleID);
-		window.location = (window.location.origin + '/detail?articleID=' + articleID);
+		data = {
+			articleID: $(event.target).attr('data-obj-id')
+		}
+		path = '/detail?';
+		relocateWindow();
 	});
 
 	$('.btn-save-note').click(function() {
-		var articleIDArray = window.location.href.split('=');
-		console.log(articleIDArray);
-		var data = {
+		articleIDArray.reverse();
+		data = {
 			username: $('#username').val().trim(),
 			q1: $('#q1').text().trim(),
 			a1: $('#sympathy').val().trim(),
@@ -17,22 +28,29 @@ $(document).ready(function() {
 			a2: $('#antipathy').val().trim(),
 			q3: $('#q3').text().trim(),
 			a3: $('#examples').val().trim(),
-			articleID: articleIDArray[1]
+			articleID: articleIDArray[0]
 		}
-		data = $.param(data);
-		window.location = window.location.origin + '/submit?' + data;
-		console.log(window.location);
+		path = '/submit?'
+		relocateWindow();
 	});
 	$('.btn-show-notes').click(function() {
-		var articleIDArray = window.location.href.split('=');
-		console.log(articleIDArray);
 		articleIDArray.reverse();
-		var data = {
-			articleID: articleIDArray[0],
-			showNotes: true
+		data = {
+			showNotes: true, 
+			articleID: articleIDArray[0]
 		}
-		data = $.params(data);
-		window.location = (window.location.origin + '/shownotes?' + data);
+		path = '/shownotes?';
+		relocateWindow();
+	});
+
+	$('.btn-create-note').click(function() {
+		articleIDArray.reverse();
+		data = {
+			showNotes: false,
+			articleID: articleIDArray[0]
+		}
+		path = '/detail?';
+		relocateWindow();
 	});
 
 });

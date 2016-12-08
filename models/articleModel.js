@@ -42,9 +42,9 @@ ArticleSchema.methods.retrieveAll = function(res) {
 	});
 };
 
-ArticleSchema.methods.retrieveOne = function(res, articleID) {
+ArticleSchema.methods.retrieveOne = function(req, res) {
 	return this.model('Article')
-		.find({_id: articleID})
+		.find({_id: req.query.articleID})
 		.exec(function(err, data) {
 		if(err) {
 			console.log(err);

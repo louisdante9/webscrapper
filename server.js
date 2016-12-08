@@ -91,7 +91,7 @@ request("http://www.dailykos.com", function(error, response, html) {
 
 app.get('/', function(req, res) {
 
-	var article = new Article(req.body);
+	var article = new Article(req.query);
 
 	//mongoose call for all articles
 
@@ -102,12 +102,9 @@ app.get('/', function(req, res) {
 app.get('/detail', function(req, res) {
 	//get the juice from the mongo article document selected and display it on the page with handlebars  use a custom method?
 
-	var article = new Article(req.body);
+	var article = new Article(req.query);
 
-	var articleID = req.query.articleID;
-	console.log(articleID);
-
-	article.retrieveOne(res, articleID);
+	article.retrieveOne(req, res);
 
 
 });

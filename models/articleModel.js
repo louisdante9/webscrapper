@@ -27,8 +27,7 @@ var ArticleSchema = new Schema ({
 		trim: true
 	}, 
 	notes: [{
-    type: Schema.Types.ObjectId,
-    ref: "Note"
+    type: Schema.Types.ObjectId
   }]
 });
 
@@ -51,19 +50,29 @@ ArticleSchema.methods.retrieveOne = function(res, articleID) {
 			console.log(err);
 		} else {
 			console.log(data);
-			res.render('article.hbs', {article: data[0]});
+			res.render('article.hbs', {article: data[0], showNotes: false});
 		}
 	});
 };
 
-// ArticleSchema.methods.findOneUpdate = function(req, res, article, note) {
-// 	return article.update({_id: req.query.articleID}, {$push: {"notes": note}})
-// 	.exec(function(err, data) {
-// 		console.log('article exec fired');
-// 		console.log(data);
-// 		res.render('article.hbs', {article: data[0]});
-// 	});
-// };
+ArticleSchema.methods.viewNotes = function(req, res, Note, article) {
+	return this.model('Article')
+	.find({_id: req.query.articleID})
+	.exec(function(err, data) {
+		console.log('viewNotes exec fired');
+		console.log(data);
+			Note.find({_id: {$in: data[0].notes}})
+			.sort({created: -1})
+			.exec(function(err, doc) {
+				if(err) {
+					console.log(err);
+				} else {
+					console.log('doc is ' + doc);
+					res.render('article.hbs', {article: data[0], notes: doc, showNotes: req.query.showNotes});
+				}
+			});
+	});
+};
 
 
 

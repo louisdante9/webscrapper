@@ -8,7 +8,7 @@
 			<button type="button" class="btn btn-large"><a href="{{article.link}}">View Full Article</a></button>
 		</div><!-- /col-article -->
 
-		{{#if article.notes.length}}
+		{{#if showNotes}}
 			{{> answers}}
 		{{else}}
 			{{> questions}}

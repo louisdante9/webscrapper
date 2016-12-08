@@ -23,5 +23,17 @@ $(document).ready(function() {
 		window.location = window.location.origin + '/submit?' + data;
 		console.log(window.location);
 	});
+	$('.btn-show-notes').click(function() {
+		var articleIDArray = window.location.href.split('=');
+		console.log(articleIDArray);
+		articleIDArray.reverse();
+		var data = {
+			articleID: articleIDArray[0],
+			showNotes: true
+		}
+		data = $.params(data);
+		window.location = (window.location.origin + '/shownotes?' + data);
+	});
+
 });
 

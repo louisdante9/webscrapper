@@ -56,9 +56,14 @@ NoteSchema.methods.saveNote = function(req, res, Article, note) {
 				console.log(err);
 			} else {
 				console.log('req.query.articleid ' + req.query.articleID)
-				return Article.update({_id: req.query.articleID}, {$push: {"notes": note._id}}, function(err, numAffected) {
-					console.log('article exec fired');
-					console.log(numAffected);
+				return Article.update({_id: req.query.articleID}, {$push: {"notes": note._id}}, {new: true}).exec(function(err, numAffected) {
+					if(err) {
+						console.log(err);
+					} else {
+						console.log('note id ' + note._id)
+						console.log(numAffected);
+						res.redirect('/shownotes?articleID=' + req.query.articleID + '&showNotes=true');
+					}
 				});
 			}
 		});

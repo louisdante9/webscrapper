@@ -56,14 +56,14 @@ ArticleSchema.methods.retrieveOne = function(res, articleID) {
 	});
 };
 
-ArticleSchema.methods.findOneUpdate = function(res, articleID, newNote._id) {
-	return this.model('Article')
-	.find({_id: articleID})
-	.exec($push: {"notes": newNote._id}, {new: true}, function(err, data) {
-		console.log(data);
-		res.render('article.hbs', {article: data[0]});
-	});
-};
+// ArticleSchema.methods.findOneUpdate = function(req, res, article, note) {
+// 	return article.update({_id: req.query.articleID}, {$push: {"notes": note}})
+// 	.exec(function(err, data) {
+// 		console.log('article exec fired');
+// 		console.log(data);
+// 		res.render('article.hbs', {article: data[0]});
+// 	});
+// };
 
 
 

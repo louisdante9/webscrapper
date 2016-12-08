@@ -1,5 +1,5 @@
 const	mongoose = require("mongoose"), 
-			express = require('express');
+		express = require('express');
 
 const	app = express();
 
@@ -18,7 +18,8 @@ var NoteSchema = new Schema ({
 	},
 	a1: {
 		type: String,
-		trim: true
+		trim: true,
+		required: "Please answer all questions."
 	},
 	q2: {
 		type: String,
@@ -26,7 +27,8 @@ var NoteSchema = new Schema ({
 	},
 	a2: {
 		type: String,
-		trim: true
+		trim: true,
+		required: "Please answer all questions."
 	},
 	q3: {
 		type: String,
@@ -34,7 +36,8 @@ var NoteSchema = new Schema ({
 	},
 	a3: {
 		type: String,
-		trim: true
+		trim: true,
+		required: "Please answer all questions."
 	},
 	articleID: {
 		type: Schema.Types.ObjectId,
@@ -47,16 +50,20 @@ var NoteSchema = new Schema ({
 
 });
 
-NoteSchema.methods.saveNote = function(res, articleID) {
-	return this.model('Article')
-		.save(function(err, data) {
+NoteSchema.methods.saveNote = function(req, res, Article, note) {
+	this.save(function(err, data) {
 			if(err) {
 				console.log(err);
 			} else {
-				console.log(data);
+				console.log('req.query.articleid ' + req.query.articleID)
+				return Article.update({_id: req.query.articleID}, {$push: {"notes": note._id}}, function(err, numAffected) {
+					console.log('article exec fired');
+					console.log(numAffected);
+				});
 			}
 		});
 };
+
 
 var Note = mongoose.model("Note", NoteSchema);
 

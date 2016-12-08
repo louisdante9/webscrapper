@@ -1,16 +1,16 @@
 const	express = require("express"),
-		bodyParser = require("body-parser"),
-		logger = require("morgan"),
-		mongoose = require("mongoose"),
-		request = require("request"),
-		cheerio = require("cheerio"),
-		PORT = 3000,
-		exphbs = require('express-handlebars'),
-		util = require('util'),
-		jquery = require('jquery');
+			bodyParser = require("body-parser"),
+			logger = require("morgan"),
+			mongoose = require("mongoose"),
+			request = require("request"),
+			cheerio = require("cheerio"),
+			PORT = 3000,
+			exphbs = require('express-handlebars'), 
+			util = require('util'),
+			jquery = require('jquery');
 
 var	Article = require('./models/articleModel.js'),
-		Note = require('./models/articleModel.js');
+		Note = require('./models/noteModel.js');
 // Mongoose mpromise deprecated - use bluebird promises
 var Promise = require("bluebird");
 
@@ -18,19 +18,14 @@ mongoose.Promise = Promise;
 
 var app = express();
 
-app.views({  
-    engines: {
-        'hbs': exphbs
-    },
-    path: 'views',
-    layoutPath: 'views/layout',
-    layout: 'main.hbs',
-    partialsPath: 'views/partials'
-});
-// app.engine('hbs', exphbs({
-// 	defaultLayout: 'main.hbs'
-// }));
+app.engine('hbs', exphbs({ 
+  extname: 'hbs', 
+  defaultLayout: 'main', 
+  layoutsDir: __dirname + '/views/layouts/',
+  partialsDir: __dirname + '/views/partials/'
+}));
 app.set('view engine', 'handlebars');
+
 
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({
@@ -117,15 +112,12 @@ app.get('/detail', function(req, res) {
 
 });
 
-app.post('/submit', function(req, res) {
-	
-	var note = new Note(req.body);
+app.get('/submit', function(req, res) {
 
-	var articleID = req.query.articleID;
-	console.log(articleID);
-
-	note.saveNote(res, articleID);
-
+	var note = new Note(req.query);
+	var article = new Article();
+	console.log('note instance ' + note);
+	note.saveNote(req, res, article, note);
 });
 
 app.listen(PORT, function() {

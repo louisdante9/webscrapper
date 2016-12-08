@@ -7,22 +7,21 @@ $(document).ready(function() {
 	});
 
 	$('.btn-save-note').click(function() {
-		var articleIDArray = window.location.pathname.split('=');
-
-		var data:{
+		var articleIDArray = window.location.href.split('=');
+		console.log(articleIDArray);
+		var data = {
 			username: $('#username').val().trim(),
 			q1: $('#q1').text().trim(),
-			q2: $('#q2').text().trim(),
-			q3: $('#q3').text().trim(),
 			a1: $('#sympathy').val().trim(),
+			q2: $('#q2').text().trim(),
 			a2: $('#antipathy').val().trim(),
+			q3: $('#q3').text().trim(),
 			a3: $('#examples').val().trim(),
-			articleID: articleIDArray[1];
+			articleID: articleIDArray[1]
 		}
 		data = $.param(data);
-		$.post(window.location.origin + '/submit?' + data, function(err, data) {
-
-		});
+		window.location = window.location.origin + '/submit?' + data;
+		console.log(window.location);
 	});
 });
 

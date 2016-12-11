@@ -37,7 +37,7 @@ app.use(express.static("public"));
 
 
 // Database configuration with mongoose
-mongoose.connect("mongodb://localhost/kos_scrape_db");
+mongoose.connect("mongodb://heroku_z3vrnqqn:u5ah129tbdnucvkud7ksra1ika@ds119718.mlab.com:19718/heroku_z3vrnqqn");
 var db = mongoose.connection;
 
 db.on("error", function(error) {

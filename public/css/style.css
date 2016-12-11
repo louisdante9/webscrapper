@@ -30,6 +30,7 @@ p {
 	background-color: rgba(42, 144, 95, 1); /* green */
 	border: 2px solid;
 	border-color: rgba(42, 144, 95, 1); /* green */
+	margin: .5em 0;
 }
 
 .btn-view-full a {
@@ -68,22 +69,20 @@ div.col-single-article {
 	cursor: pointer;
 }
 div.col-single-article:hover {
-	font-family: 'UnifrakturCook', cursive;
 	color: rgba(255, 255, 255, 1); /* white */
 	background-color: rgba(42, 144, 95, 1); /* green */
+}
+
+@media screen and (max-width: 640px) {
+	div.col-single-article {
+		width: calc(100% - 0.5em);
+	}
 }
 
 div.col-title {
 
 }
 
-div.container-detail h3 {
-	font-family: 'UnifrakturCook', cursive;
-}
-
-div.container-articles {
-
-}
 
 div.jumbotron {
 	font-family: 'UnifrakturCook', cursive;
@@ -104,9 +103,18 @@ div.single-note {
 }
 
 p.answer {
-
+	margin-bottom: 0.5em;
+}
+p.answer h3 {
+	line-height: 1.5;
 }
 
-p.question {
+p.question h3 {
+	line-height: 1.5;
+}
 
+@media screen and (max-width: 640px) {
+	p.question h3, p.answer h3 {
+		line-height: 1.5;
+	}
 }

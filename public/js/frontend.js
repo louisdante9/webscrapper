@@ -9,7 +9,6 @@ $(document).ready(function() {
 		data = $.param(data);
 		window.location = (window.location.origin + path + data);
 	}
-
 	$('.col-single-article').click(function() {
 		data = {
 			articleID: $(event.target).attr('data-obj-id')
@@ -22,10 +21,6 @@ $(document).ready(function() {
 		articleIDArray.reverse();
 		data = {
 			username: $('#username').val().trim(),
-			q1: $('#q1').text().trim(),
-			a1: $('#sympathy').val().trim(),
-			q2: $('#q2').text().trim(),
-			a2: $('#antipathy').val().trim(),
 			q3: $('#q3').text().trim(),
 			a3: $('#examples').val().trim(),
 			articleID: articleIDArray[0]
